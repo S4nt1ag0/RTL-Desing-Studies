@@ -9,18 +9,23 @@ cyan='\033[0;36m'
 # Clear the color after that
 clear='\033[0m'
 
-echo "Use --R to run all, --g to gui, and -view top_sim.wcfg to load waveforms"
+echo "Use: ./run_sim.sh <lab_folder_name> --R to run all, --g to gui, and -view top_sim.wcfg to load waveforms"
 
-CURRENT_DIR=`dirname $0`
-list=`${CURRENT_DIR}/srclist2path.sh "${CURRENT_DIR}/../srclist/riscv_small_tb.srclist"`
-echo ${list}
-
-${CURRENT_DIR}/../bin/compile_tests.sh
-if [ $? == 1 ]; then
-    echo -e "${red}ERROR: Error detected on compiling test!${clear}"
+# Verifica se o parâmetro foi passado
+if [ -z "$1" ]; then
+    echo -e "${red}Erro: Você precisa passar o nome da pasta do laboratório como argumento!${clear}"
     exit 1
 fi
 
-xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list}
-xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
-xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@
+# Nome do laboratório passado como argumento
+LAB_FOLDER=$1
+
+CURRENT_DIR=`dirname $0`
+BUILD_DIR="${CURRENT_DIR}/../build"
+
+list=`${CURRENT_DIR}/srclist2path.sh "${CURRENT_DIR}/../labs/${LAB_FOLDER}/srclists"`
+echo ${list}
+
+xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list} > "${BUILD_DIR}/xvlog.log" 2>&1
+xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr > "${BUILD_DIR}/xelab.log" 2>&1
+xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@ > "${BUILD_DIR}/xsim.log" 2>&1
