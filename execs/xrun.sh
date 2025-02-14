@@ -17,15 +17,24 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Nome do laboratório passado como argumento
-LAB_FOLDER=$1
-
 CURRENT_DIR=`dirname $0`
+CURRENT_DIR=$(realpath "$CURRENT_DIR")
+LAB_FOLDER=$1 # Nome do laboratório passado como argumento
+# Diretório de build (src/builds)
 BUILD_DIR="${CURRENT_DIR}/../build"
 
-list=`${CURRENT_DIR}/srclist2path.sh "${CURRENT_DIR}/../labs/${LAB_FOLDER}/srclists"`
+cd "$BUILD_DIR" || { echo -e "${red}Erro: Não foi possível acessar o diretório de build!${clear}"; exit 1; }
+
+list=$("${CURRENT_DIR}/srclist2path.sh" "${CURRENT_DIR}/../labs/${LAB_FOLDER}/srclists" "${CURRENT_DIR}/../labs/${LAB_FOLDER}")
+
 echo ${list}
 
-xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list} > "${BUILD_DIR}/xvlog.log" 2>&1
-xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr > "${BUILD_DIR}/xelab.log" 2>&1
-xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@ > "${BUILD_DIR}/xsim.log" 2>&1
+#xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list} > "xvlog.log" 2>&1
+#xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr > "xelab.log" 2>&1
+#xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@ > "xsim.log" 2>&1
+echo "#################### ANTES DO XVLOG ###########################################"
+xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list}
+echo "#################### ANTES DO XVLAB ###########################################"
+xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
+echo "#################### ANTES DO XSIM ###########################################"
+xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@

@@ -2,14 +2,15 @@
 
 srclist2paths () {
     srclist=$1
-    base_path="$(dirname "${srclist}")"
-
+    base_path=$2
+    
     # Percorre cada linha do arquivo srclist
     while IFS= read -r srcfile; do
         # Se a linha representa um outro arquivo .srclist, processa recursivamente
         if [[ "$srcfile" =~ \.srclist$ ]]; then
-            srclist2paths "${base_path}/${srcfile}"
+            srclist2paths "${base_path}/${srcfile}" "$base_path"
         else
+           
             # Se for uma referência a outro laboratório, ajusta o caminho
             if [[ "$srcfile" =~ ^labs/ ]]; then
                 full_path="${CURRENT_DIR}/../${srcfile}"
@@ -30,7 +31,7 @@ CURRENT_DIR=$(dirname "$0")
 
 # Lista de arquivos-fonte
 list=""
-srclist2paths "$1"
+srclist2paths "$1" "$2"
 
 # Retorna a lista completa
 echo "${list}"
