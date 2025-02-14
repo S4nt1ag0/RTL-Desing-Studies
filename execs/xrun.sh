@@ -29,12 +29,16 @@ list=$("${CURRENT_DIR}/srclist2path.sh" "${CURRENT_DIR}/../labs/${LAB_FOLDER}/sr
 
 echo ${list}
 
+# Extrai o testbench (ultimo elemento da lista)
+last_file=$(echo "$list" | awk '{print $NF}')  # Pega o último item
+tb_name=$(basename "$last_file" .sv)    # Remove o caminho e a extensão
+
 #xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list} > "xvlog.log" 2>&1
 #xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr > "xelab.log" 2>&1
 #xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@ > "xsim.log" 2>&1
 echo "#################### ANTES DO XVLOG ###########################################"
 xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list}
 echo "#################### ANTES DO XVLAB ###########################################"
-xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
+xelab  ${tb_name} --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
 echo "#################### ANTES DO XSIM ###########################################"
 xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@
