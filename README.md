@@ -11,9 +11,9 @@ $ source /opt/Xilinx/Vivado/2024.1/.settings64-Vivado.sh
 
 Choose the lab and run the `xrun` script, like the example:
 ```bash
-$ ./execs/xrun.sh lab1__count
+$ ./execs/xrun.sh lab0__arithmetic_unit
 or
-$ ./execs/xrun.sh lab1__count --g
+$ ./execs/xrun.sh lab0__arithmetic_unit --g
 ```
 
 Each lab contains:
