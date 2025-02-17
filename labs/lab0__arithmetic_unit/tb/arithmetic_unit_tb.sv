@@ -5,7 +5,7 @@
 // 
 // Create Date: 02/10/2025 01:38:28 PM
 // Design Name: 
-// Module Name: ArithmeticUnit_tb
+// Module Name: arithmetic_unit_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,14 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ArithmeticUnit_tb();
+module arithmetic_unit_tb();
     import definitions::*;
     
     result_t result;
     instruction_t IW;
     
-    // Instantiate the ArithmeticUnit
-    ArithmeticUnit duv (
+    // Instantiate the arithmetic_unit
+    arithmetic_unit duv (
         .IW(IW), 
         .result(result)
     );

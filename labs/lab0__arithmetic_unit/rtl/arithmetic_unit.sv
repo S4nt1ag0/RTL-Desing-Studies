@@ -5,7 +5,7 @@
 // 
 // Create Date: 02/10/2025 01:34:33 PM
 // Design Name: 
-// Module Name: ArithmeticUnit
+// Module Name: arithmetic_unit
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ArithmeticUnit(
+module arithmetic_unit(
 input definitions::instruction_t IW,
 output definitions::result_t result
 );

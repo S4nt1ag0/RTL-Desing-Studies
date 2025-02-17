@@ -47,4 +47,4 @@ xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${
 xelab  ${tb_file} --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
 
 # Run the simulation in Xilinx xsim with additional arguments
-xsim   top_sim -testplusarg UVM_TESTNAME=myTest ${@:2}
+xsim   top_sim -testplusarg UVM_TESTNAME=myTest ${@:2} --tclbatch ../execs/save_wave.tcl
