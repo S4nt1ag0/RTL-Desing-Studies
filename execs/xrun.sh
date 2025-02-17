@@ -17,28 +17,34 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+# Get the current script directory
 CURRENT_DIR=`dirname $0`
 CURRENT_DIR=$(realpath "$CURRENT_DIR")
-LAB_FOLDER=$1 # Nome do laboratório passado como argumento
-# Diretório de build (src/builds)
+
+# Name of the lab passed as an argument
+LAB_FOLDER=$1
+
+# Define the build directory
 BUILD_DIR="${CURRENT_DIR}/../build"
 
-cd "$BUILD_DIR" || { echo -e "${red}Erro: Não foi possível acessar o diretório de build!${clear}"; exit 1; }
+# Navigate to the build directory or display an error if it fails
+cd "$BUILD_DIR" || { echo -e "${red}Error: Unable to access the build directory!${clear}"; exit 1; }
 
+# Retrieve the list of source files using srclist2path.sh
 list=$("${CURRENT_DIR}/srclist2path.sh" "${CURRENT_DIR}/../labs/${LAB_FOLDER}/srclists" "${CURRENT_DIR}/../labs/${LAB_FOLDER}")
 
+# Display the list of retrieved source files
 echo ${list}
 
-# Extrai o testbench (ultimo elemento da lista)
-last_file=$(echo "$list" | awk '{print $NF}')  # Pega o último item
-tb_name=$(basename "$last_file" .sv)    # Remove o caminho e a extensão
+# Extract the testbench file name based on the lab name
+tb_name=$(echo "$LAB_FOLDER" | cut -d'_' -f3-)
+tb_file="${tb_name}""_tb"
 
-#xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list} > "xvlog.log" 2>&1
-#xelab  riscv_small_tb --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr > "xelab.log" 2>&1
-#xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@ > "xsim.log" 2>&1
-echo "#################### ANTES DO XVLOG ###########################################"
+# Compile the SystemVerilog files with UVM support
 xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${list}
-echo "#################### ANTES DO XVLAB ###########################################"
-xelab  ${tb_name} --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
-echo "#################### ANTES DO XSIM ###########################################"
-xsim   top_sim -testplusarg UVM_TESTNAME=myTest $@
+
+# Elaborate the testbench and generate the simulation using Xilinx xsim
+xelab  ${tb_file} --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
+
+# Run the simulation in Xilinx xsim with additional arguments
+xsim   top_sim -testplusarg UVM_TESTNAME=myTest ${@:2}
