@@ -46,5 +46,12 @@ xvlog  -L uvm -sv ${XILINX_VIVADO}/data/system_verilog/uvm_1.2/uvm_macros.svh ${
 # Elaborate the testbench and generate the simulation using Xilinx xsim
 xelab  ${tb_file} --timescale 1ns/1ps -L uvm -s top_sim --debug typical --mt 16 --incr
 
+# Check if the program will run with a graphical interface or not  
+if [[ " ${@:2} " =~ " --g " ]] || [[ "${@:2} " =~ " --gui" ]]; then
+    export RUN_GUI=1  # Enable GUI mode  
+else
+    export RUN_GUI=0  # Disable GUI mode (run in batch mode)  
+fi
+
 # Run the simulation in Xilinx xsim with additional arguments
 xsim   top_sim -testplusarg UVM_TESTNAME=myTest ${@:2} --tclbatch ../execs/save_wave.tcl

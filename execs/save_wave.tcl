@@ -1,11 +1,13 @@
 # Log all signals recursively
-log_wave -recursive *
+add_wave -recursive *
 
 # Run simulation until completion
 run all
 
 # Save waveform database
-save_wave_database ./waveforms.wdb
+save_wave_config ./waveforms.wcfg
 
-# Close simulation
-quit
+# Check if RUN_GUI is set; if not, exit simulation
+if { [expr {$::env(RUN_GUI) == 0}] } {
+    quit
+}
