@@ -1,4 +1,4 @@
-rtl/Alu_pkg.sv
-rtl/ArithmeticUnit.sv
+../Utils/alu_pkg.sv
+lab0__arithmetic_unit/srclists
 rtl/fsm_calculator.sv
 tb/fsm_calculator_tb.sv

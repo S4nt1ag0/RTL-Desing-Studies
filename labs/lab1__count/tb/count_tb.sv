@@ -80,6 +80,8 @@ module count_tb(
         iniciar = 1'b1;
         #100;
 
+        // End of simulation
+        $finish;
     end
 
     

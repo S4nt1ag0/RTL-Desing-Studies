@@ -17,7 +17,7 @@ module fsm_calculator
     instruction_t IW;
     result_t result_inner;
     
-    ArithmeticUnit arithmeticUnitInstance (
+    arithmetic_unit arithmeticUnitInstance (
         .IW(IW), 
         .result(result_inner)
     );
@@ -67,7 +67,7 @@ module fsm_calculator
         if (!rst_n) begin
             value_b <= '0;
             value_a <= '0;
-            opcode <= '0;
+            opcode <= definitions::ADD;
         end
         if (rega_en) begin
             value_a <= dados[3:0];
