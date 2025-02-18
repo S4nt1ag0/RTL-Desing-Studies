@@ -5,7 +5,7 @@
 // 
 // Create Date: 02/10/2025 01:38:28 PM
 // Design Name: 
-// Module Name: arithmetic_unit_tb
+// Module Name: scale_mux_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 

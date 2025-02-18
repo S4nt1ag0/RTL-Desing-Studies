@@ -5,7 +5,7 @@
 // 
 // Create Date: 02/17/2025 04:47:11 PM
 // Design Name: 
-// Module Name: register
+// Module Name: scale_mux
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
