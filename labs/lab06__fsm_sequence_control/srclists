@@ -1,0 +1,3 @@
+rtl/typedefs.sv
+rtl/fsm_sequence_control.sv
+tb/fsm_sequence_control_tb.sv
