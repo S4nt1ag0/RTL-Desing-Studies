@@ -1,0 +1,2 @@
+rtl/memory_module.sv
+tb/memory_module_tb.sv
