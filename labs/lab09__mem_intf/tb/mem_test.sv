@@ -37,8 +37,8 @@ module mem_test
         $display ("Clear memory Test");
 
         for(int index_clear=0; index_clear<32; index_clear++) begin
-            write_mem(index_clear,0);
-            read_mem(index_clear,intf.out_data, intf.debug);
+            intf.write_mem(index_clear,0);
+            intf.read_mem(index_clear,intf.out_data);
             errors_amount = checkit(index_clear, intf.out_data, 8'h00);
         end
 
@@ -46,52 +46,13 @@ module mem_test
 
         $display("Data = Address Test");
         for(int index_data = 0; index_data <32; index_data++) begin
-            write_mem(index_data,index_data, intf.debug);
-            read_mem(index_data,intf.out_data,intf. debug);
+            intf.write_mem(index_data,index_data);
+            intf.read_mem(index_data,intf.out_data);
             errors_amount = checkit(index_data, intf.out_data, index_data);
         end
         printstatus(errors_amount);
         $finish;
     end: memtest
-
-
-    task write_mem(
-        input [ADDR_WIDTH-1:0] in_addr,
-        input [DATA_WIDTH-1:0] in_data,
-        input debug=0
-        );
-
-        @(negedge intf.clk);
-        intf.write <= 1'b1;
-        intf.read <= 1'b0;
-        intf.addr <= in_addr;
-        intf.data_in <= in_data;
-        @(negedge intf.clk);
-        intf.write <= 1'b0;
-        if(intf.debug)
-            $display("Write Data | Address= %d  Data= %h", in_addr, in_data);
-        
-    endtask: write_mem
-
-
-    task read_mem(
-        input [ADDR_WIDTH-1:0] in_addr,
-        output [DATA_WIDTH-1:0] out_data,
-        input debug=0
-        );
-
-        @(negedge intf.clk);
-        intf.write <= 1'b0;
-        intf.read <= 1'b1;
-        intf.addr <= in_addr;
-        @(negedge intf.clk);
-        out_data <= intf.data_out;
-        intf.read <= 1'b0;
-        @(negedge intf.clk); //Extra delay to ensure the read value is returned
-        if(intf.debug)
-            $display("Read Data | Address= %d  Data= %h", in_addr, out_data);
-    endtask: read_mem
-
 
     function int checkit (
         input [4:0] address, 
