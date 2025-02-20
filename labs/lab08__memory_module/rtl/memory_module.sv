@@ -5,7 +5,7 @@
 // 
 // Create Date: 02/10/2025 01:34:33 PM
 // Design Name: 
-// Module Name: alu_control
+// Module Name: memory_module
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 

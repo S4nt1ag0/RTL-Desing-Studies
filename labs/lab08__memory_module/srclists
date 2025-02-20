@@ -1,2 +1,3 @@
 rtl/memory_module.sv
+tb/mem_test.sv
 tb/memory_module_tb.sv
