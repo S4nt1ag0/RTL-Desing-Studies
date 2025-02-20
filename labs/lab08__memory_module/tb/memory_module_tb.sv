@@ -31,6 +31,7 @@ module memory_module_tb();
     logic [DATA_WIDTH-1:0] data_in;
     logic [DATA_WIDTH-1:0] data_out;
 
+    logic [DATA_WIDTH-1:0] out_data;
 
     memory_module #(.ADDR_WIDTH (ADDR_WIDTH), .DATA_WIDTH (DATA_WIDTH)) dut(
         .clk      (clk      ),
@@ -58,22 +59,21 @@ module memory_module_tb();
 
     initial begin: memtest
         int errors_amount;
-        logic [DATA_WIDTH-1:0] out_data;
         $display ("Clear memory Test");
 
-        for(int i=0; i<32; i++) begin
-            write_mem(i,0);
-            read_mem(i,out_data);
-            errors_amount = checkit(i, out_data, 8'h00);
+        for(int index_clear=0; index_clear<32; index_clear++) begin
+            write_mem(index_clear,0);
+            read_mem(index_clear,out_data);
+            errors_amount = checkit(index_clear, out_data, 8'h00);
         end
 
         printstatus(errors_amount);
 
         $display("Data = Address Test");
-        for(int i=0; i<32; i++) begin
-            write_mem(i,i);
-            read_mem(i,out_data);
-            errors_amount = checkit(i, out_data, i);
+        for(int index_data = 0; index_data <32; index_data++) begin
+            write_mem(index_data,index_data);
+            read_mem(index_data,out_data);
+            errors_amount = checkit(index_data, out_data, index_data);
         end
         printstatus(errors_amount);
         $finish;
@@ -92,7 +92,8 @@ module memory_module_tb();
         data_in <= in_data;
         @(negedge clk);
         write <= 1'b0;
-
+        $display("Write Data | Address= %d  Data= %h", in_addr, in_data);
+        
     endtask: write_mem
 
 
@@ -108,6 +109,7 @@ module memory_module_tb();
         @(negedge clk);
         out_data <= data_out;
         read <= 1'b0;
+        @(negedge clk); //Extra delay to ensure the read value is returned
     endtask: read_mem
 
 

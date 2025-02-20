@@ -20,15 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module memory_module
-import typedefs::*;
 #(parameter ADDR_WIDTH = 5, parameter DATA_WIDTH = 8)
 (
     input logic clk,
     input logic read,
     input logic write,
-    input logic [ADDR_WIDTH:0] addr,
-    input logic [DEFAULT_WORD_W-1:0] data_in,
-    output logic [DEFAULT_WORD_W-1:0] data_out
+    input logic [ADDR_WIDTH-1:0] addr,
+    input logic [DATA_WIDTH-1:0] data_in,
+    output logic [DATA_WIDTH-1:0] data_out
 );
 
 logic [DATA_WIDTH-1:0] mem_block [0:(2**ADDR_WIDTH)-1];
