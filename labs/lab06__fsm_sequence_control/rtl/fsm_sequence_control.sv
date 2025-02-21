@@ -30,12 +30,12 @@ module fsm_sequence_control
     input logic clk,
     input logic zero,
     output logic mem_rd,
+    output logic mem_wr,
     output logic load_ir,
-    output logic halt,
-    output logic inc_pc,
     output logic load_ac,
     output logic load_pc,
-    output logic mem_wr
+    output logic inc_pc,
+    output logic halt
     );
 
     state_t state = INST_ADDR, next_state;

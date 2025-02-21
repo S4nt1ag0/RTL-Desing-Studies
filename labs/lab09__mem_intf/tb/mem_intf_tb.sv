@@ -23,11 +23,11 @@ module mem_intf_tb();
     localparam ADDR_WIDTH = 5;
     localparam DATA_WIDTH = 8;
     localparam CLK_PERIOD = 5ns;
+    localparam debug = 0;
 
     logic clk;
-    bit debug=0;
     
-    memory_module_intf #(.ADDR_WIDTH (ADDR_WIDTH), .DATA_WIDTH (DATA_WIDTH)) memoryIntf (clk, debug);
+    memory_module_intf #(.ADDR_WIDTH (ADDR_WIDTH), .DATA_WIDTH (DATA_WIDTH), .debug(debug)) memoryIntf (clk);
 
     memory_module #(.ADDR_WIDTH (ADDR_WIDTH), .DATA_WIDTH (DATA_WIDTH)) dut (memoryIntf.DUT);
 

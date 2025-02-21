@@ -25,6 +25,7 @@ module mem_test
     memory_module_intf intf
 );
 
+    logic [DATA_WIDTH-1:0] out_data;
     initial begin
         $timeformat( -9, 0, "ns", 9);
         #4000ns
@@ -38,8 +39,8 @@ module mem_test
 
         for(int index_clear=0; index_clear<32; index_clear++) begin
             intf.write_mem(index_clear,0);
-            intf.read_mem(index_clear,intf.out_data);
-            errors_amount = checkit(index_clear, intf.out_data, 8'h00);
+            intf.read_mem(index_clear,out_data);
+            errors_amount = checkit(index_clear, out_data, 8'h00);
         end
 
         printstatus(errors_amount);
@@ -47,8 +48,8 @@ module mem_test
         $display("Data = Address Test");
         for(int index_data = 0; index_data <32; index_data++) begin
             intf.write_mem(index_data,index_data);
-            intf.read_mem(index_data,intf.out_data);
-            errors_amount = checkit(index_data, intf.out_data, index_data);
+            intf.read_mem(index_data,out_data);
+            errors_amount = checkit(index_data, out_data, index_data);
         end
         printstatus(errors_amount);
         $finish;

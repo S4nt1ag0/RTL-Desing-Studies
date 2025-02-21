@@ -1,8 +1,7 @@
 interface memory_module_intf
-#(parameter ADDR_WIDTH = 5, parameter DATA_WIDTH = 8)
+#(parameter ADDR_WIDTH = 5, parameter DATA_WIDTH = 8, parameter debug = 0)
 (
-    input clk,
-    input debug
+    input clk
 );
 
     logic read;
@@ -10,7 +9,6 @@ interface memory_module_intf
     logic [ADDR_WIDTH-1:0] addr;
     logic [DATA_WIDTH-1:0] data_in;
     logic [DATA_WIDTH-1:0] data_out;
-    logic [DATA_WIDTH-1:0] out_data;
     
     task automatic write_mem(
         input [ADDR_WIDTH-1:0] in_addr,
@@ -51,8 +49,6 @@ interface memory_module_intf
         output addr,
         output data_in,
         input  data_out,
-        output out_data,
-        input debug,
         import write_mem,
         import read_mem
     );
