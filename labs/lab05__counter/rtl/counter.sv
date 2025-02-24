@@ -20,13 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module counter(
+module counter 
+#(parameter DATA_WIDTH = 8)
+(
     input logic clk,
     input logic rst_n,
-    input logic [5:0] data,
+    input logic [DATA_WIDTH-1:0] data,
     input logic load,
     input logic enable,
-    output logic [5:0] count
+    output logic [DATA_WIDTH-1:0] count
     );
     
     

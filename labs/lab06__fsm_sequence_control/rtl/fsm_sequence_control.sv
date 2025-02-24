@@ -22,10 +22,10 @@
 module fsm_sequence_control
     import typedefs::*;
 #(
-    parameter WORD_WIDTH = 8
+    parameter WORD_WIDTH = DEFAULT_WORD_W
 )
 (
-    input opcodes_t opcode ,
+    input opcodes_t opcode,
     input logic rst_n,
     input logic clk,
     input logic zero,
@@ -35,7 +35,8 @@ module fsm_sequence_control
     output logic load_ac,
     output logic load_pc,
     output logic inc_pc,
-    output logic halt
+    output logic halt,
+    output logic fetch
     );
 
     state_t state = INST_ADDR, next_state;
@@ -72,6 +73,7 @@ module fsm_sequence_control
         load_ac = 1'b0;
         load_pc = 1'b0;
         mem_wr = 1'b0;
+        fetch = 0'b0;
 
         case (state)
             INST_ADDR: begin
@@ -85,6 +87,8 @@ module fsm_sequence_control
             end
             INST_FETCH: begin
                 mem_rd = 1'b1;
+                if(opcode == JMP)
+                    fetch = 1'b1;
             end
             INST_LOAD: begin
                 mem_rd = 1'b1;

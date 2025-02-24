@@ -3,6 +3,7 @@ package typedefs;
     localparam DEFAULT_WORD_W = 8;
     localparam OPCODE_WITH = 3;
     localparam STATE_WITH = 8;
+    localparam ADDR_WIDTH = 5;
    
     typedef enum logic [OPCODE_WITH-1:0] {
         HLT, //halt

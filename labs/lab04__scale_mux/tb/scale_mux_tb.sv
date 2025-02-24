@@ -25,32 +25,32 @@ module scale_mux_tb();
    
     logic [7:0] in_a;
     logic [7:0] in_b;
-    logic sel_a;
+    logic sel_b;
     logic [7:0] out;
     
     scale_mux duv (
         .in_a(in_a),
         .in_b(in_b),
-        .sel_a(sel_a),
+        .sel_b(sel_b),
         .out(out)
     );
 
     initial begin
-        in_a = 8'h0; in_b = 8'h0; sel_a = '0;
+        in_a = 8'h0; in_b = 8'h0; sel_b = '0;
         #1 
-        in_a = 8'h0; in_b = 8'h0; sel_a = '1;
+        in_a = 8'h0; in_b = 8'h0; sel_b = '1;
         #1
-        in_a = 8'h0; in_b = 8'hff; sel_a = '0;
+        in_a = 8'h0; in_b = 8'hff; sel_b = '0;
         #1
-        in_a = 8'h0; in_b = 8'hff; sel_a = '1;
+        in_a = 8'h0; in_b = 8'hff; sel_b = '1;
         #1
-        in_a = 8'hff; in_b = 8'h00; sel_a = '0;
+        in_a = 8'hff; in_b = 8'h00; sel_b = '0;
         #1
-        in_a = 8'hff; in_b = 8'h00; sel_a = '1;
+        in_a = 8'hff; in_b = 8'h00; sel_b = '1;
         #1
-        in_a = 8'hff; in_b = 8'hff; sel_a = '0;
+        in_a = 8'hff; in_b = 8'hff; sel_b = '0;
         #1
-        in_a = 8'hff; in_b = 8'hff; sel_a = '1;
+        in_a = 8'hff; in_b = 8'hff; sel_b = '1;
         #1
         // End of simulation
         $finish;

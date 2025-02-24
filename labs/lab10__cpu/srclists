@@ -1,0 +1,9 @@
+../Utils/cpu_pkg.sv
+lab03__register/srclists
+lab04__scale_mux/srclists
+lab05__counter/srclists
+lab06__fsm_sequence_control/srclists
+lab07__alu_control/srclists
+lab08__memory_module/srclists
+rtl/cpu.sv
+tb/cpu_tb.sv

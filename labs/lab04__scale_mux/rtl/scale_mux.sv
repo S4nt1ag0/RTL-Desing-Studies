@@ -20,15 +20,17 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module scale_mux(
-    input logic [7:0] in_a, 
-    input logic [7:0] in_b,
-    input logic sel_a,
-    output logic [7:0] out
+module scale_mux
+#(parameter DATA_WIDTH = 8)
+(
+    input logic [DATA_WIDTH-1:0] in_a, 
+    input logic [DATA_WIDTH-1:0] in_b,
+    input logic sel_b,
+    output logic [DATA_WIDTH-1:0] out
     );
 
     always_comb begin: select_data
-        if(!sel_a) begin
+        if(sel_b) begin
             out <= in_b;
         end else begin
             out <= in_a;

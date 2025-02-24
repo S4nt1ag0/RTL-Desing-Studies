@@ -21,6 +21,7 @@
 
 module alu_control
 import typedefs::*;
+#(parameter DATA_WIDTH = DEFAULT_WORD_W)
 (
     input logic clk,
     input opcodes_t opcode,

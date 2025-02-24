@@ -20,7 +20,10 @@
 //////////////////////////////////////////////////////////////////////////////////
 module cpu
 import typedefs::*;
-#(parameter DEFAULT_WORD_W = 8)
+#(
+    parameter DEFAULT_WORD_W = 8,
+    parameter ADDR_WIDTH = 5
+)
 (
     input logic clk,
     input logic rst_n
@@ -29,10 +32,10 @@ import typedefs::*;
 
 
 logic zero;
-opcodes_t opcode;
 logic mem_rd;
 logic mem_wr;
 logic halt;
+logic fetch;
 
 logic load_ac;
 logic load_ir;
@@ -45,11 +48,14 @@ logic [DEFAULT_WORD_W-1:0] accum;
 logic [DEFAULT_WORD_W-1:0] alu_out;
 logic [DEFAULT_WORD_W-1:0] ir_out;
 
-logic [ADDR_WIDTH-1:0] ir_addr;
+
 logic [ADDR_WIDTH-1:0] pc_addr;
 logic [ADDR_WIDTH-1:0] addr;
 
-memory_module memory
+opcodes_t opcode = opcodes_t'(ir_out[(8-1) -: 3]);  
+logic [ADDR_WIDTH-1:0] ir_addr = ir_out[(8-3-1) -: 5];
+
+memory_module #(.ADDR_WIDTH(ADDR_WIDTH),.DATA_WIDTH(DEFAULT_WORD_W)) memory
 (
     .clk      (clk      ),
     .read     (mem_rd     ),
@@ -60,7 +66,7 @@ memory_module memory
 );
 
 
-register accumulator_register(
+register #(.DATA_WIDTH(DEFAULT_WORD_W)) accumulator_register(
     .clk(clk),
     .rst_n(rst_n),
     .data(alu_out),
@@ -68,7 +74,7 @@ register accumulator_register(
     .out(accum)
 );
 
-register intruction_register(
+register #(.DATA_WIDTH(DEFAULT_WORD_W)) intruction_register(
     .clk(clk),
     .rst_n(rst_n),
     .data(data_out),
@@ -76,10 +82,8 @@ register intruction_register(
     .out(ir_out)
 );
 
-opcode = opcodes_t'(ir_out[DEFAULT_WORD_W-1:DEFAULT_WORD_W-OPCODE_WITH]);
-ir_addr = ir_out[(DEFAULT_WORD_W-OPCODE_WITH - 1) : 0];
-
-alu_control alu(
+alu_control #(.DATA_WIDTH(DEFAULT_WORD_W)) alu
+(
     .clk(clk),
     .opcode(opcode),
     .data(data_out),
@@ -88,25 +92,25 @@ alu_control alu(
     .zero(zero)
 );
 
-counter program_counter (
+counter #(.DATA_WIDTH(ADDR_WIDTH)) program_counter (
     .clk(clk),
     .rst_n(rst_n),
     .data(ir_addr),
-    .load_pc(load_pc),
-    .inc_pc(inc_pc),
+    .load(load_pc),
+    .enable(inc_pc),
     .count(pc_addr)
     );
 
-    scale_mux mux (
+    scale_mux #(.DATA_WIDTH(ADDR_WIDTH)) mux (
         .in_a(ir_addr),
         .in_b(pc_addr),
-        .sel_a(), //quem é fetch?
+        .sel_b(fetch),
         .out(addr)
     );
 
-    fsm_sequence_control controller( //quem é fetch?
+    fsm_sequence_control #(.WORD_WIDTH(DEFAULT_WORD_W)) controller(
         .clk        (clk        ),
-        .rst_n      (rst_n       ),
+        .rst_n      (rst_n      ),
         .zero       (zero       ),
         .opcode     (opcode     ),
         .mem_rd     (mem_rd     ),
@@ -115,7 +119,8 @@ counter program_counter (
         .inc_pc     (inc_pc     ),
         .load_ac    (load_ac    ),
         .load_pc    (load_pc    ),
-        .mem_wr     (mem_wr     )
+        .mem_wr     (mem_wr     ),
+        .fetch      (fetch      )
     );
 
 

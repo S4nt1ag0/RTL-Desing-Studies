@@ -20,17 +20,19 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module register(
+module register
+#(parameter DATA_WIDTH = 8)
+(
     input logic clk,
     input logic rst_n,
-    input logic [7:0] data,
+    input logic [DATA_WIDTH-1 :0] data,
     input logic enable,
-    output logic [7:0] out
+    output logic [DATA_WIDTH-1:0] out
     );
 
     always_ff @(posedge clk, negedge rst_n) begin: get_data
         if(!rst_n) begin
-            out <= 8'b0;
+            out <= '0;
         end else if(enable) begin
             out <= data;
         end

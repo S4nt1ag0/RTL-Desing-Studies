@@ -15,7 +15,7 @@ module fsm_sequence_control_tb;
     logic rst_n = 1'b1;
 
     logic zero;
-    opcodes_t opcode;
+    opcodes_t opcode; 
 
     state_t  lstate;
 
