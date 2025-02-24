@@ -22,7 +22,8 @@ module cpu
 import typedefs::*;
 #(
     parameter DEFAULT_WORD_W = 8,
-    parameter ADDR_WIDTH = 5
+    parameter ADDR_WIDTH = 5,
+    parameter OPCODE_WITH = 3
 )
 (
     input logic clk,
@@ -41,6 +42,7 @@ logic load_ac;
 logic load_ir;
 logic load_pc;
 logic inc_pc;
+opcodes_t opcode;
 
 
 logic [DEFAULT_WORD_W-1:0] data_out;
@@ -51,9 +53,10 @@ logic [DEFAULT_WORD_W-1:0] ir_out;
 
 logic [ADDR_WIDTH-1:0] pc_addr;
 logic [ADDR_WIDTH-1:0] addr;
+logic[ADDR_WIDTH-1:0] ir_addr;
 
-opcodes_t opcode = opcodes_t'(ir_out[(8-1) -: 3]);  
-logic [ADDR_WIDTH-1:0] ir_addr = ir_out[(8-3-1) -: 5];
+assign opcode = opcodes_t'(ir_out[(DEFAULT_WORD_W-1) : (DEFAULT_WORD_W-1) - OPCODE_WITH]);  
+assign ir_addr = ir_out[(8-3-1) -: 5];
 
 memory_module #(.ADDR_WIDTH(ADDR_WIDTH),.DATA_WIDTH(DEFAULT_WORD_W)) memory
 (
@@ -102,8 +105,8 @@ counter #(.DATA_WIDTH(ADDR_WIDTH)) program_counter (
     );
 
     scale_mux #(.DATA_WIDTH(ADDR_WIDTH)) mux (
-        .in_a(ir_addr),
-        .in_b(pc_addr),
+        .in_a(pc_addr),
+        .in_b(ir_addr),
         .sel_b(fetch),
         .out(addr)
     );

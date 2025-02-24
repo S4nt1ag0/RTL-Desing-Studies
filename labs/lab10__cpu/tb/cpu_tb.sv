@@ -31,13 +31,10 @@ module cpu_tb;
     logic clk;
     logic rst_n;
 
-    logic mem_write;
-    logic mem_read;
-    logic [ADDR_WIDTH-1:0] mem_addr;
-    logic [DEFAULT_WORD_W-1:0] mem_data_in;
-
   cpu # (
-    .DEFAULT_WORD_W(DEFAULT_WORD_W)
+    .DEFAULT_WORD_W(DEFAULT_WORD_W),
+    .ADDR_WIDTH(ADDR_WIDTH),
+    .OPCODE_WITH(OPCODE_WITH)
   )
   cpu_inst (
     .clk(clk),
