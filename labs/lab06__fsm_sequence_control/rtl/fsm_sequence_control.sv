@@ -106,11 +106,14 @@ module fsm_sequence_control
             OP_FETCH: begin
                 if(opcode == ADD || opcode == AND || opcode == XOR || opcode == LDA)
                     mem_rd = 1'b1;
+                if(opcode == LDA)
+                    fetch = 1'b1;
             end
             ALU_OP: begin
                 if(opcode == ADD || opcode == AND || opcode == XOR || opcode == LDA) begin
                     mem_rd = 1'b1;
                     load_ac = 1'b1;
+                    fetch = 1'b1;
                 end
                 else if( opcode == SKZ && zero)
                     inc_pc = 1'b1;
@@ -121,13 +124,16 @@ module fsm_sequence_control
                 if(opcode == ADD || opcode == AND || opcode == XOR || opcode == LDA) begin
                     mem_rd = 1'b1;
                     load_ac = 1'b1;
+                    fetch = 1'b1;
                 end
                 else if(opcode == JMP) begin
                     inc_pc = 1'b1;
                     load_pc = 1'b1;
                 end
-                else if(opcode == STO)
+                else if(opcode == STO) begin
                     mem_wr = 1'b1;
+                    fetch = 1'b1;
+                end
             end
         endcase  
     end

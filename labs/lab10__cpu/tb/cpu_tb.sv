@@ -94,7 +94,7 @@ module cpu_tb;
         end
     end
 
-    // Apply & check Stimulus
+    // Alimenta memoria com as instruções
     initial begin
         $readmemb ( {dirname,"cpuTest01.pat"}, memory_content );
         memory_index = 0;
@@ -107,6 +107,21 @@ module cpu_tb;
 
         @(negedge clk);
         rst_n = 1;
+    end
+
+    always @(posedge clk) begin
+        if (rst_n) begin // Garante que o reset já foi liberado
+            if (cpu_inst.ir_out.fields.opcode == HLT) begin
+                if (cpu_inst.addr == 5'd17) begin
+                    $display("Passou com sucesso");
+                    $finish; // Finaliza a simulação
+                end else if (cpu_inst.addr != 5'd0) begin
+                    $display("Falha ao executar a instrução próximo à posição %d da memória", cpu_inst.addr);
+                    $finish; // Finaliza a simulação
+                end
+                
+            end
+        end
     end
 
     initial begin
