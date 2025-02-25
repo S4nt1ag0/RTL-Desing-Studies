@@ -22,8 +22,7 @@ module cpu
 import typedefs::*;
 #(
     parameter DEFAULT_WORD_W = 8,
-    parameter ADDR_WIDTH = 5,
-    parameter OPCODE_WITH = 3
+    parameter ADDR_WIDTH = 5
 )
 (
     input logic clk,
@@ -42,21 +41,15 @@ logic load_ac;
 logic load_ir;
 logic load_pc;
 logic inc_pc;
-opcodes_t opcode;
-
 
 logic [DEFAULT_WORD_W-1:0] data_out;
 logic [DEFAULT_WORD_W-1:0] accum;
 logic [DEFAULT_WORD_W-1:0] alu_out;
-logic [DEFAULT_WORD_W-1:0] ir_out;
+ir_union_out ir_out;
 
 
 logic [ADDR_WIDTH-1:0] pc_addr;
 logic [ADDR_WIDTH-1:0] addr;
-logic[ADDR_WIDTH-1:0] ir_addr;
-
-assign opcode = opcodes_t'(ir_out[(DEFAULT_WORD_W-1) : (DEFAULT_WORD_W-1) - OPCODE_WITH]);  
-assign ir_addr = ir_out[(8-3-1) -: 5];
 
 memory_module #(.ADDR_WIDTH(ADDR_WIDTH),.DATA_WIDTH(DEFAULT_WORD_W)) memory
 (
@@ -88,7 +81,7 @@ register #(.DATA_WIDTH(DEFAULT_WORD_W)) intruction_register(
 alu_control #(.DATA_WIDTH(DEFAULT_WORD_W)) alu
 (
     .clk(clk),
-    .opcode(opcode),
+    .opcode(ir_out.fields.opcode),
     .data(data_out),
     .accum(accum),
     .out(alu_out),
@@ -98,7 +91,7 @@ alu_control #(.DATA_WIDTH(DEFAULT_WORD_W)) alu
 counter #(.DATA_WIDTH(ADDR_WIDTH)) program_counter (
     .clk(clk),
     .rst_n(rst_n),
-    .data(ir_addr),
+    .data(ir_out.fields.ir_addr),
     .load(load_pc),
     .enable(inc_pc),
     .count(pc_addr)
@@ -106,7 +99,7 @@ counter #(.DATA_WIDTH(ADDR_WIDTH)) program_counter (
 
     scale_mux #(.DATA_WIDTH(ADDR_WIDTH)) mux (
         .in_a(pc_addr),
-        .in_b(ir_addr),
+        .in_b(ir_out.fields.ir_addr),
         .sel_b(fetch),
         .out(addr)
     );
@@ -115,7 +108,7 @@ counter #(.DATA_WIDTH(ADDR_WIDTH)) program_counter (
         .clk        (clk        ),
         .rst_n      (rst_n      ),
         .zero       (zero       ),
-        .opcode     (opcode     ),
+        .opcode     (ir_out.fields.opcode     ),
         .mem_rd     (mem_rd     ),
         .load_ir    (load_ir    ),
         .halt       (halt       ),

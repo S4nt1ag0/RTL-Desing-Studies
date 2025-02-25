@@ -33,8 +33,7 @@ module cpu_tb;
 
   cpu # (
     .DEFAULT_WORD_W(DEFAULT_WORD_W),
-    .ADDR_WIDTH(ADDR_WIDTH),
-    .OPCODE_WITH(OPCODE_WITH)
+    .ADDR_WIDTH(ADDR_WIDTH)
   )
   cpu_inst (
     .clk(clk),
