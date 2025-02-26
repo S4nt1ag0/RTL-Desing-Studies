@@ -73,7 +73,7 @@ module fsm_sequence_control
         load_ac = 1'b0;
         load_pc = 1'b0;
         mem_wr = 1'b0;
-        fetch = 0'b0;
+        fetch = 1'b0;
 
         case (state)
             INST_ADDR: begin

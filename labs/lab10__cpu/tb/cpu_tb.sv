@@ -56,7 +56,7 @@ module cpu_tb;
     end
 
     initial begin
-        int idx = fullpath.len() - 1;
+      automatic int idx = fullpath.len() - 1;
 
         // Encontrar a última ocorrência de '/'
         while (idx >= 0 && fullpath[idx] != "/") begin
@@ -113,8 +113,6 @@ module cpu_tb;
             $readmemb ( {dirname,{ "CPUtest", 8'h30+test_number[7:0], ".dat" }}, cpu_inst.memory.mem_block);
             repeat (2) @(negedge clk);
             rst_n = 1;
-            $display("     TIME       PC    INSTR    OP   ADR   DATA\n");
-            $display("  ----------    --    -----    --   ---   ----\n");
             while ( !halt )
             @( posedge clk );
 

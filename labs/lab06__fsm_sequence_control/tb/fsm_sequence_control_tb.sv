@@ -67,7 +67,7 @@ module fsm_sequence_control_tb;
     string dirname;
 
     initial begin
-        int idx = fullpath.len() - 1;
+        automatic int idx = fullpath.len() - 1;
 
         // Encontrar a última ocorrência de '/'
         while (idx >= 0 && fullpath[idx] != "/") begin

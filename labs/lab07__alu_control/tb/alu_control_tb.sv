@@ -62,20 +62,20 @@ module alu_control_tb;
 
     // Apply Stimulus
     initial begin
-        @(posedge clk)
-        { opcode, data, accum } = 19'h0_37_DA; @(posedge clk) checkit('h0_da);
-        { opcode, data, accum } = 19'h1_37_DA; @(posedge clk) checkit('h0_da);
-        { opcode, data, accum } = 19'h2_37_DA; @(posedge clk) checkit('h0_11);
-        { opcode, data, accum } = 19'h3_37_DA; @(posedge clk) checkit('h0_12);
-        { opcode, data, accum } = 19'h4_37_DA; @(posedge clk) checkit('h0_ed);
-        { opcode, data, accum } = 19'h5_37_DA; @(posedge clk) checkit('h0_37);
-        { opcode, data, accum } = 19'h6_37_DA; @(posedge clk) checkit('h0_da);
-        { opcode, data, accum } = 19'h7_37_00; @(posedge clk) checkit('h1_00);
-        { opcode, data, accum } = 19'h2_07_12; @(posedge clk) checkit('h0_19);
-        { opcode, data, accum } = 19'h3_1F_35; @(posedge clk) checkit('h0_15);
-        { opcode, data, accum } = 19'h4_1E_1D; @(posedge clk) checkit('h0_03);
-        { opcode, data, accum } = 19'h5_72_00; @(posedge clk) checkit('h1_72);
-        { opcode, data, accum } = 19'h6_00_10; @(posedge clk) checkit('h0_10);
+        @(negedge clk)
+        { opcode, data, accum } = 19'h0_37_DA; @(negedge clk) checkit('h0_da);
+        { opcode, data, accum } = 19'h1_37_DA; @(negedge clk) checkit('h0_da);
+        { opcode, data, accum } = 19'h2_37_DA; @(negedge clk) checkit('h0_11);
+        { opcode, data, accum } = 19'h3_37_DA; @(negedge clk) checkit('h0_12);
+        { opcode, data, accum } = 19'h4_37_DA; @(negedge clk) checkit('h0_ed);
+        { opcode, data, accum } = 19'h5_37_DA; @(negedge clk) checkit('h0_37);
+        { opcode, data, accum } = 19'h6_37_DA; @(negedge clk) checkit('h0_da);
+        { opcode, data, accum } = 19'h7_37_00; @(negedge clk) checkit('h1_00);
+        { opcode, data, accum } = 19'h2_07_12; @(negedge clk) checkit('h0_19);
+        { opcode, data, accum } = 19'h3_1F_35; @(negedge clk) checkit('h0_15);
+        { opcode, data, accum } = 19'h4_1E_1D; @(negedge clk) checkit('h0_03);
+        { opcode, data, accum } = 19'h5_72_00; @(negedge clk) checkit('h1_72);
+        { opcode, data, accum } = 19'h6_00_10; @(negedge clk) checkit('h0_10);
         $display("ALU TEST PASSED");
         $finish;
     end
