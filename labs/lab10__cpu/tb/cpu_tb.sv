@@ -110,7 +110,7 @@ module cpu_tb;
             endcase
 
             rst_n = 0; // Mantém o reset ativo
-            $readmemb ( {dirname,"CPUtest1.dat"}, cpu_inst.memory.mem_block);
+            $readmemb ( {dirname,{ "CPUtest", 8'h30+test_number[7:0], ".dat" }}, cpu_inst.memory.mem_block);
             repeat (2) @(negedge clk);
             rst_n = 1;
             $display("     TIME       PC    INSTR    OP   ADR   DATA\n");
