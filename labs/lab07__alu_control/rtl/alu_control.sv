@@ -38,7 +38,7 @@ always_comb begin: zero_statement
         zero = 0;
 end
 
-always_ff @(negedge clk) begin: alu_decode
+always_ff @(posedge clk) begin: alu_decode
     case (opcode)
         HLT: out <= accum;
         SKZ: out <= accum;

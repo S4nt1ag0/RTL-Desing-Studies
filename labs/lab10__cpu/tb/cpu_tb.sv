@@ -128,6 +128,7 @@ module cpu_tb;
                 $finish;
               end
             $display ( "\nCPU TEST %0d PASSED",test_number );
+            $finish;
         end
     end
 
