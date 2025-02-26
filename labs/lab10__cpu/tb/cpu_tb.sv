@@ -30,6 +30,7 @@ module cpu_tb;
     //Ports
     logic clk;
     logic rst_n;
+    logic halt;
 
   cpu # (
     .DEFAULT_WORD_W(DEFAULT_WORD_W),
@@ -37,35 +38,11 @@ module cpu_tb;
   )
   cpu_inst (
     .clk(clk),
-    .rst_n(rst_n)
+    .rst_n(rst_n),
+    .halt(halt)
   );
 
-  logic   [DEFAULT_WORD_W-1:0]   memory_content    [0:(2**ADDR_WIDTH)-1];
-  integer memory_index;
-
-
-  task write_mem(
-        input [ADDR_WIDTH-1:0] in_addr,
-        input [DEFAULT_WORD_W-1:0] in_data
-    );
-        @(negedge clk);
-        force cpu_inst.memory.write = 1'b1;
-        force cpu_inst.memory.read = 1'b0;
-        force cpu_inst.memory.addr = in_addr;
-        force cpu_inst.memory.data_in = in_data;
-        @(negedge clk);
-        force cpu_inst.memory.write  = 1'b0;
-        @(negedge clk);
-        // Liberar os sinais forçados
-        release cpu_inst.memory.write;
-        release cpu_inst.memory.read;
-        release cpu_inst.memory.addr;
-        release cpu_inst.memory.data_in;
-        $display("Write Data | Address = %d, Data = %h", in_addr, in_data);
-
-    endtask: write_mem
-
-
+  logic [31:0]   test_number;  
 
     string fullpath = `__FILE__;
     string dirname;
@@ -96,31 +73,61 @@ module cpu_tb;
 
     // Alimenta memoria com as instruções
     initial begin
-        $readmemb ( {dirname,"cpuTest01.pat"}, memory_content );
-        memory_index = 0;
-        rst_n = 0; // Mantém o reset ativo
-        repeat(2) @(negedge clk);
-        while (memory_index <= (2**ADDR_WIDTH)-1) begin
-            write_mem(memory_index, memory_content[memory_index]);
-            memory_index++;
-        end
+        
 
-        @(negedge clk);
-        rst_n = 1;
-    end
+        $display ( "" );
+        $display ( "****************************************" );
+        $display ( "THE FOLLOWING DEBUG TASKS ARE AVAILABLE:" );
+        $display ( "1- The basic CPU diagnostic.            " );
+        $display ( "2- The advanced CPU diagnostic.         " );
+        $display ( "3- The Fibonacci program.               " );
+        $display ( "****************************************" );
+        $display ( "" );
+        //$display ( "Enter ' deposit test_number # ; run' \n" );
+        test_number = 1;
+        //$stop; // wait for test number
+        
+        if ( test_number > 3 )
+          begin
+            $display ( "Test number %d is not between 1 and 3", test_number );
+          end
+        else
+       //for (int test_number = 1; test_number<3; test_number++)
+          begin
+            case ( test_number )
+              1: begin
+                   $display ( "CPUtest1 - BASIC CPU DIAGNOSTIC PROGRAM \n" );
+                   $display ( "THIS TEST SHOULD HALT WITH THE PC AT 17 hex\n" );
+                 end
+              2: begin
+                   $display ( "CPUtest2 - ADVANCED CPU DIAGNOSTIC PROGRAM\n" );
+                   $display ( "THIS TEST SHOULD HALT WITH THE PC AT 10 hex\n" );
+                 end
+              3: begin
+                   $display ( "CPUtest3 - FIBONACCI NUMBERS to 144\n" );
+                   $display ( "THIS TEST SHOULD HALT WITH THE PC AT 0C hex\n" );
+                 end
+            endcase
 
-    always @(posedge clk) begin
-        if (rst_n) begin // Garante que o reset já foi liberado
-            if (cpu_inst.ir_out.fields.opcode == HLT) begin
-                if (cpu_inst.addr == 5'd17) begin
-                    $display("Passou com sucesso");
-                    $finish; // Finaliza a simulação
-                end else if (cpu_inst.addr != 5'd0) begin
-                    $display("Falha ao executar a instrução próximo à posição %d da memória", cpu_inst.addr);
-                    $finish; // Finaliza a simulação
-                end
-                
-            end
+            rst_n = 0; // Mantém o reset ativo
+            $readmemb ( {dirname,"CPUtest1.dat"}, cpu_inst.memory.mem_block);
+            repeat (2) @(negedge clk);
+            rst_n = 1;
+            $display("     TIME       PC    INSTR    OP   ADR   DATA\n");
+            $display("  ----------    --    -----    --   ---   ----\n");
+            while ( !halt )
+            @( posedge clk );
+
+            if ( test_number == 1 && cpu_inst.pc_addr !== 5'h17
+              || test_number == 2 && cpu_inst.pc_addr !== 5'h10
+              || test_number == 3 && cpu_inst.pc_addr !== 5'h0C 
+              || cpu_inst.pc_addr === 5'hXX)
+              begin
+                $display ( "CPU TEST FAILED" );
+                $display("Falha ao executar a instrução próximo à posição %d da memória", cpu_inst.addr);
+                $finish;
+              end
+            $display ( "\nCPU TEST %0d PASSED",test_number );
         end
     end
 

@@ -26,7 +26,8 @@ import typedefs::*;
 )
 (
     input logic clk,
-    input logic rst_n
+    input logic rst_n,
+    output logic halt
 );
 
 
@@ -34,7 +35,6 @@ import typedefs::*;
 logic zero;
 logic mem_rd;
 logic mem_wr;
-logic halt;
 logic fetch;
 
 logic load_ac;
@@ -118,22 +118,5 @@ counter #(.DATA_WIDTH(ADDR_WIDTH)) program_counter (
         .mem_wr     (mem_wr     ),
         .fetch      (fetch      )
     );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 endmodule

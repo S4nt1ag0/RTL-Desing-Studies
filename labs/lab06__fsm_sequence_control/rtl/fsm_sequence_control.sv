@@ -106,7 +106,6 @@ module fsm_sequence_control
             OP_FETCH: begin
                 if(opcode == ADD || opcode == AND || opcode == XOR || opcode == LDA)
                     mem_rd = 1'b1;
-                if(opcode == LDA)
                     fetch = 1'b1;
             end
             ALU_OP: begin
