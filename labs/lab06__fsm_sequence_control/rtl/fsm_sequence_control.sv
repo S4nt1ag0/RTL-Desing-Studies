@@ -111,7 +111,6 @@ module fsm_sequence_control
             ALU_OP: begin
                 if(opcode == ADD || opcode == AND || opcode == XOR || opcode == LDA) begin
                     mem_rd = 1'b1;
-                    load_ac = 1'b1;
                     fetch = 1'b1;
                 end
                 else if( opcode == SKZ && zero)
