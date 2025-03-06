@@ -28,7 +28,7 @@ module mem_test
     logic [DATA_WIDTH-1:0] out_data;
     initial begin
         $timeformat( -9, 0, "ns", 9);
-        #4000ns
+        #6000ns
         $display("Memory test Timeout");
         $finish;
     end
@@ -52,6 +52,17 @@ module mem_test
             errors_amount = checkit(index_data, out_data, index_data);
         end
         printstatus(errors_amount);
+
+        $display("Random Data Test");
+        for(int index_rand = 0; index_rand < 32; index_rand++) begin
+            logic [7:0] rand_data;
+            rand_data = random_ascii();
+            intf.write_mem(index_rand, rand_data);
+            intf.read_mem(index_rand, out_data);
+            errors_amount = checkit(index_rand, out_data, rand_data);
+        end
+        printstatus(errors_amount);
+
         $finish;
     end: memtest
 
@@ -61,7 +72,7 @@ module mem_test
         expected);
         static int error_status;
         if(actual !== expected) begin
-            $display("ERROR: address:%h Data:%h Expected:%h", address, actual, expected);
+            $display("ERROR: address:%h Data:%c (%h) Expected:%c (%h)", address, actual, actual, expected, expected);
             error_status++;
         end
         return (error_status);
@@ -73,6 +84,15 @@ module mem_test
         else
             $display("Test Failed with %d Erros", status);
     endfunction: printstatus
+
+    function automatic logic [7:0] random_ascii();
+        int rand_val;
+        rand_val = $urandom_range(0, 9); //(0-7: Uppercase, 8-9: lowcase)
+        if(rand_val < 8)
+            return $urandom_range(8'h41, 8'h5A); // Uppercase A-Z
+        else
+            return $urandom_range(8'h61, 8'h7A); // lowcase a-z
+    endfunction: random_ascii
 
 endmodule
 
