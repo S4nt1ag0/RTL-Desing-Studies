@@ -84,7 +84,7 @@ module cpu_tb;
         $display ( "****************************************" );
         $display ( "" );
         //$display ( "Enter ' deposit test_number # ; run' \n" );
-        test_number = 1;
+        test_number = 3;
         //$stop; // wait for test number
         
         if ( test_number > 3 )
