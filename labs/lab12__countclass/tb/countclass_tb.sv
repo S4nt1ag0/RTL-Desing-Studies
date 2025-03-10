@@ -22,17 +22,27 @@ module countclass_tb;
     Counter counter_obj;
     Upcounter upcounter_obj;
     Downcounter downcounter_obj;
+    Timer timer_obj;
 
     initial begin
+        $display("\n=== Before Constructors ===");
+        $display("UpCounter: count_instance = %0d, ", upcounter_obj.get_instance_acount());
+        $display("DownCounter: count_instance = %0d, ", downcounter_obj.get_instance_acount());
+
+
+        $display("\n=== Initialization ===");
          // Creating objects with custom min and max values
         counter_obj = new(4, 10, 2);   // count=4, min=2, max=10
         upcounter_obj = new(5, 7, 3);  // count=5, min=3, max=7
         downcounter_obj = new(7, 12, 5); // count=7, min=5, max=12
-
-        $display("\n=== Initialization ===");
+        timer_obj = new(22,55,40);
         $display("Counter: count = %0d, min = %0d, max = %0d", counter_obj.getcount(), counter_obj.min, counter_obj.max);
         $display("UpCounter: count = %0d, min = %0d, max = %0d", upcounter_obj.getcount(), upcounter_obj.min, upcounter_obj.max);
         $display("DownCounter: count = %0d, min = %0d, max = %0d", downcounter_obj.getcount(), downcounter_obj.min, downcounter_obj.max);
+
+        $display("\n=== After Constructors ===");
+        $display("UpCounter: count_instance = %0d, ", upcounter_obj.get_instance_acount());
+        $display("DownCounter: count_instance = %0d, ", downcounter_obj.get_instance_acount());
 
         // Testing load with out-of-range values
         $display("\n=== Testing Load with Out-of-Range Values ===");
@@ -48,12 +58,21 @@ module countclass_tb;
 
         // Testing next() to ensure rollover occurs at limits
         $display("\n=== Testing Next and Rollover ===");
-        repeat(6) begin
-            upcounter_obj.next();
-            downcounter_obj.next();
-            $display("UpCounter: count = %0d", upcounter_obj.getcount());
-            $display("DownCounter: count = %0d", downcounter_obj.getcount());
-        end
+        upcounter_obj = new(3, 5, 2);  // min = 2, max = 5
+        downcounter_obj = new(5, 7, 3); // min = 3, max = 7
+
+        $display("\n=== Testing UpCounter ===");
+        repeat(5) upcounter_obj.next(); // Test rollover
+
+        $display("\n=== Testing DownCounter ===");
+        repeat(5) downcounter_obj.next(); // Test rollover
+
+
+        $display("\n=== Testing Timer ===");
+
+
+        repeat(900) timer_obj.next(); // Test rollover
+
 
         #200 $finish;
     end
