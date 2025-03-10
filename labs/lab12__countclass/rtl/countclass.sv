@@ -20,13 +20,38 @@
 
 class Counter;
     int count;
+    int max;
+    int min;
 
-    function new(int count = 0);
-        this.count = count;
+    function new(int count = 0, int max=1, int min=0);
+        this.check_limit(max, min);
+        this.check_set(count);
     endfunction
 
     function load(int count);
-        this.count = count;
+        this.check_set(count);
+    endfunction
+
+    function check_limit(int arg1, int arg2);
+        if(arg1 > arg2) begin
+            this.max = arg1;
+            this.min = arg2;
+        end
+        else begin
+            this.max = arg2;
+            this.min = arg1;
+        end
+
+    endfunction
+
+    function check_set(int arg);
+        if(arg > this.max || arg < this.min) begin
+            this.count = this.min;
+            $display("WARNING: argument outside min-max limits, the count value is the min value: %0d", this.count);
+        end
+        else 
+            this.count = arg;
+
     endfunction
 
     function int getcount();

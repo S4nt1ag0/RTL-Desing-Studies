@@ -18,19 +18,16 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-class Upcounter;
-    int count;
+class Upcounter extends Counter;
 
-    function new(int count = 0);
-        this.count = count;
+    function new(int count = 0, int max=1, int min=0);
+        super.new(count, max, min);
     endfunction
 
-    function load(int count);
-        this.count = count;
+    function next();
+        super.check_set(count+1);
+        $display("Counter: %0d", this.count);
     endfunction
 
-    function int getcount();
-        return this.count;
-    endfunction
 endclass
 

@@ -1,2 +1,4 @@
 rtl/countclass.sv
+rtl/downcounter.sv
+rtl/upcounter.sv
 tb/countclass_tb.sv
