@@ -21,6 +21,7 @@
 module countclass_tb;
     Counter counter_obj;
     Upcounter upcounter_obj;
+    Upcounter new_upcounter_obj;
     Downcounter downcounter_obj;
     Timer timer_obj;
 
@@ -32,11 +33,11 @@ module countclass_tb;
 
         $display("\n=== Initialization ===");
          // Creating objects with custom min and max values
-        counter_obj = new(4, 10, 2);   // count=4, min=2, max=10
         upcounter_obj = new(5, 7, 3);  // count=5, min=3, max=7
         downcounter_obj = new(7, 12, 5); // count=7, min=5, max=12
         timer_obj = new(22,55,40);
-        $display("Counter: count = %0d, min = %0d, max = %0d", counter_obj.getcount(), counter_obj.min, counter_obj.max);
+        
+        //$display("Counter: count = %0d, min = %0d, max = %0d", counter_obj.getcount(), counter_obj.min, counter_obj.max);
         $display("UpCounter: count = %0d, min = %0d, max = %0d", upcounter_obj.getcount(), upcounter_obj.min, upcounter_obj.max);
         $display("DownCounter: count = %0d, min = %0d, max = %0d", downcounter_obj.getcount(), downcounter_obj.min, downcounter_obj.max);
 
@@ -46,11 +47,9 @@ module countclass_tb;
 
         // Testing load with out-of-range values
         $display("\n=== Testing Load with Out-of-Range Values ===");
-        counter_obj.load(15); // Should be set to min = 2
         upcounter_obj.load(2); // Should be set to min = 3
         downcounter_obj.load(20); // Should be set to min = 5
 
-        $display("Counter after load(15): count = %0d", counter_obj.getcount());
         $display("UpCounter after load(2): count = %0d", upcounter_obj.getcount());
         $display("DownCounter after load(20): count = %0d", downcounter_obj.getcount());
 
@@ -67,6 +66,12 @@ module countclass_tb;
         $display("\n=== Testing DownCounter ===");
         repeat(5) downcounter_obj.next(); // Test rollover
 
+        counter_obj = upcounter_obj;
+        $cast(new_upcounter_obj, counter_obj);
+
+        $display("\n=== Testing counter virtual ===");
+        repeat(5) counter_obj.next(); //Test with assign Upcounter to Counter
+        repeat(5) new_upcounter_obj.next(); //Test with Counter $Cast to Upcounter
 
         $display("\n=== Testing Timer ===");
 

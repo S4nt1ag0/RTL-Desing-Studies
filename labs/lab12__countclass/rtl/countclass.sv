@@ -18,7 +18,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-class Counter;
+virtual class Counter;
     int count;
     int max;
     int min;
@@ -52,6 +52,10 @@ class Counter;
         else 
             this.count = arg;
 
+    endfunction
+
+    function next();
+        $display("You are in CountClass");
     endfunction
 
     function int getcount();
