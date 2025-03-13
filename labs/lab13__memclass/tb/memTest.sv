@@ -68,9 +68,7 @@ task run_tests();
     for(int index_rand = 0; index_rand < 32; index_rand++) begin
         assert(this.randomize()) else $display("Randomization failed");
         intf.write_mem(this.addr, this.data);
-        $display("Foi escrito no endereço %d o valor %d", this.addr, this.data);
         intf.read_mem(this.addr, out_data);
-        $display("Foi lido no endereço %d o valor %d", this.addr, out_data);
         errors_amount += checkit(this.addr, out_data, this.data);
     end
     printstatus(errors_amount);

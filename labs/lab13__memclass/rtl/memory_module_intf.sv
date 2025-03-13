@@ -1,5 +1,5 @@
 interface memory_module_intf
-#(parameter ADDR_WIDTH = 5, parameter DATA_WIDTH = 8, parameter debug = 0)
+#(parameter ADDR_WIDTH = 5, parameter DATA_WIDTH = 8, parameter DEBUG_MODE = 0)
 (
     input clk
 );
@@ -21,7 +21,7 @@ interface memory_module_intf
         data_in <= in_data;
         @(negedge clk);
         write <= 1'b0;
-        if (debug)
+        if (DEBUG_MODE)
             $display("Write Data | Address = %d, Data = %h", in_addr, in_data);
     endtask: write_mem
 
@@ -37,7 +37,7 @@ interface memory_module_intf
         out_data = data_out;
         read <= 1'b0;
         @(negedge clk); //Extra delay to ensure the read value is returned
-        if (debug)
+        if (DEBUG_MODE)
             $display("Read Data | Address = %d, Data = %h", in_addr, out_data);
     endtask: read_mem
 
