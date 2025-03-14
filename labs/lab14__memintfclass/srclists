@@ -1,0 +1,4 @@
+rtl/memory_module_intf.sv
+rtl/memory_module.sv
+tb/memTest.sv
+tb/memintfclass_tb.sv
