@@ -16,14 +16,26 @@ or
 $ ./execs/xrun.sh lab0__arithmetic_unit --g
 ```
 
-Each lab contains:
-- An **`rtl` folder** to store hardware designs.
-- A **`tb` folder** for module testbenches.
-- A **`srclist` file** that lists all the necessary modules and testbenches required to run the lab.
+## Lab Structure  
+Each lab contains:  
+- **`rtl/`** → Hardware design files  
+- **`tb/`** → Testbenches (main testbench: `labName_tb.sv`)  
+- **`srclist`** → Lists required modules and testbenches  
 
-The lab folders follow the naming convention:  
-**`lab${Number}__labName`**,  
-and the main testbench for the lab should be named:  
-**`labName_tb.sv`**.
-
-With this pattern, when running the script, the code knows which module it needs to execute and which testbench is the main one for that lab.
+### Usage  
+Run the script to create a new lab:  
+```bash
+./execs/create_lab.sh <lab_number> <lab_name>
+```
+Example:  
+```bash
+./execs/create_lab.sh 1 alu
+```
+This generates:  
+```
+labs/
+└── lab1__alu/
+    ├── rtl/
+    ├── tb/ (includes alu_tb.sv)
+    └── srclist
+```
